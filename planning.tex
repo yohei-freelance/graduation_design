@@ -1,0 +1,636 @@
+\documentclass[12pt]{jsarticle}
+\usepackage{geometry}
+\geometry{left=10mm,right=10mm,top=10mm,bottom=15mm}	
+\usepackage{amssymb}
+\usepackage{mathcomp}
+\usepackage{amsmath}
+\usepackage{here}
+\usepackage[dvipdfmx]{graphicx}
+\begin{titlepage}
+\title{\Huge{卒業設計 計画要求書}}
+\author{\LARGE{工学部航空宇宙工学科4年 野本陽平 (03-180332)}}
+\date{\large{2019年12月23日}}
+\thispagestyle{empty}
+\end{titlepage}
+\begin{document}
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+\section{設計要求}
+設計要求は, 以下のように定めるものとする.
+\begin{table}[htb]
+	\caption{設計要求}
+	\begin{center}
+		\begin{tabular}{ll} \hline
+			項目 & 要求 \\ \hline \hline
+			Payload & 520 passengers (First class: 15, Business class: 50, Economy class: 455) \\ 
+			 & + 2 pilots + 18 cabin crew \\
+			Range & $8,500$ nm with max. payload, alternate airport (200nm) \\
+			 & and 45 min. loiter \\
+			Altitude & $38,000$ ft for design range \\
+			Cruise Speed & M0.85 \\
+			Climb & as required in FAR25 \\
+			Take off and Landing & $10,000$ ft take-off field length at sea level \\
+			 & $7,500$ ft landing field length at $W_{\rm L} = 0.85 W_{\rm TO}$ at sea level \\
+			Powerplants & Quadruplet Tarbo Fan \\
+			Certification Base & FAR25 \\
+			Airfoil & Super Critical \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+\section{当該計画を選んだ理由, 設計構想}
+自分は今年の4Sセメスターの間, 南アフリカのケープタウン大学へ留学してきた. その際香港〜ヨハネスブルグ間の長距離飛行を経験し, (やや時代遅れかもしれないが, )超長距離飛ぶ大型の飛行機を設計してみたいと思った. また, 小さい頃からジャンボジェットへの憧れがあったことも否めない. 道のり基準だと香港〜ニューヨーク間の飛行機($13,000$km, 道のり基準では$15,000$kmとなることも)が存在することもあり, 日本から南アフリカへダイレクトに行く($13,500$km)ことができるような飛行機を作りたいと思ったのが本機体を選んだ理由である.
+\newpage
+\section{既存機体データのまとめ}
+既存機体については, Boeing 747-8とAirbus 380のものを参考にしたい.
+\begin{table}[H]
+	\caption{既存機体データのまとめ}
+	\begin{center}
+		\begin{tabular}{lll} \hline
+			要素名 & Boeing 747-8 & Airbus 380 \\ \hline \hline
+			$W_{\rm TOmax}$ [lb] & $987,000$ & $1,234,585$ \\
+			$S$ [\rm sqft] & $5,960$ & $9,100$ \\
+			$T_{\rm max}$ [lbf] & 4 $\times$ $66,500$ & 4 $\times$ $78,200$ \\
+			$W/S_{\rm TO}$ [lb/sqft] & 165.5 & 135.7 \\
+			$T/W_{\rm TO}$ & 0.27 & 0.253 \\
+			$AR$ & 9.8 & 7.53 \\
+			$\lambda$ & 0.3 & 0.3 \\
+			$\Lambda$ [deg] & 30 & 30 \\
+			$\Gamma$ [deg] & 6 & 5.5 \\
+			Airfoil & - & - \\
+			cruise speed & M0.855 & M0.85 \\
+			range [nm] & $7,730$ & $8,000$ \\
+			take off [ft] & $10,200$ & $9,800$ \\
+			length [ft] & 250.2 & 238.7 \\
+			wing span [ft] & 224.7 & 261.8 \\
+			height [ft] & 61.4 & 79 \\
+			operating empty weight [lb] & $485,300$ & $611,000$ \\
+			max payload [lb] & $168,300$ & $200,000$ \\
+			crew and passengers & 467(max)? & 853(max)? \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+ただし, 高度$37,000$[ft], M0.85でのLapses Rateは0.20とする.
+\section{Aircraft Configurationの決定}
+これらについては, 既存機体を基に現在主流になっているものを採用する.
+\begin{table}[htb]
+	\caption{Aircraft Configuration}
+	\begin{center}
+		\begin{tabular}{ll} \hline
+			要素 & 設定 \\ \hline \hline
+			主翼の上下位置 & 低翼 \\
+			エンジン取り付け位置 & 主翼下方型 \\
+			尾翼 & 低翼 + 一枚翼 \\
+			脚 & 前輪配置 \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+\section{Sizing}
+\subsection{最大離陸重量$W_{\rm TO}$, 空虚重量$W_{\rm E}$, 燃料重量$W_{\rm F}$の見積もり}
+\subsubsection{Mission Fuel Fraction $M_{\rm ff}$の見積もり}
+各フェーズでの重量比は, テキストP.71より以下のように仮定する.
+\begin{eqnarray*}
+	(\cfrac{W_1}{W_{\rm TO}}, \cfrac{W_2}{W_1}, \cfrac{W_3}{W_2}, \cfrac{W_4}{W_3}, \cfrac{W_6}{W_5}, \cfrac{W_9}{W_8}) = (0.990, 0.990, 0.995, 0.980, 0.990, 0.992)
+\end{eqnarray*}
+巡航, 代替空港への巡航, 空中待機のフェーズではブレゲーの式を利用し,
+\begin{eqnarray*}
+	\cfrac{W_5}{W_4} &=& \exp(-\cfrac{R}{\frac{V}{c_j}\frac{L}{D}}) \\
+	\cfrac{W_7}{W_6} &=& \exp(-\cfrac{R_{alt}}{\frac{V_{alt}}{c_{j_{alt}}}\frac{L}{D_{alt}}}) \\
+	\cfrac{W_8}{W_7} &=& \exp(-\cfrac{E_{ltr}}{\frac{1}{c_{j_{ltr}}}\frac{L}{D_{ltr}}})
+\end{eqnarray*}
+を得る. 設計要求, 標準大気表により,
+\begin{eqnarray*}
+	R &=& 8,500 [\rm nm] \\
+	R_{\rm alt} &=& 200 [\rm nm] \\
+	V &=& M 0.85 \times 574 [\rm kt] = 488 [\rm kt] \\
+	V_{\rm alt} &=& 350 [\rm kt]\quad @ \ 20,000 [\rm ft] \\
+	\cfrac{L}{D} = \cfrac{L}{D_{\rm alt}} &=& 18 \\
+	c_j = c_{j_{\rm alt}} &=& 0.4 [\rm (lb/hr)/lb] \\
+	E_{\rm ltr} &=& 0.75 [\rm hr] \\
+	\cfrac{L}{D_{\rm ltr}} &=& 19 \\
+	c_{j_{\rm ltr}} &=& 0.45 [\rm (lb/hr)/lb]
+\end{eqnarray*}
+とすると, 
+\begin{eqnarray*}
+	\cfrac{W_5}{W_4} &=& 0.6790 \\
+	\cfrac{W_7}{W_6} &=& 0.9858 \\
+	\cfrac{W_8}{W_7} &=& 0.9824
+\end{eqnarray*}
+となるので, Mission Fuel Fractionは
+\begin{eqnarray*}
+	M_{\rm ff} = \cfrac{W_9}{W_8}\cfrac{W_8}{W_7}\cfrac{W_7}{W_6}\cfrac{W_6}{W_5}\cfrac{W_5}{W_4}\cfrac{W_4}{W_3}\cfrac{W_3}{W_2}\cfrac{W_2}{W_1}\cfrac{W_1}{W_{\rm TO}} = 0.6172
+\end{eqnarray*}
+
+\subsubsection{ペイロード重量$W_{\rm PL}$, 乗務員重量$W_{\rm crew}$の見積もり}
+設計要求と航空機設計法P.75の仮定より, 以下のように求まる.
+\begin{eqnarray*}
+	W_{\rm PL} &=& (175 + 66 [\rm lb]) \times 65 + (175 + 44) \times 455 = 115,310 [\rm lb] \\
+	W_{\rm crew} &=& (175 + 30 [\rm lb]) \times (2 + 18) = 4,100 [\rm lb] \\
+\end{eqnarray*}
+
+\subsubsection{最大離陸重量$W_{\rm TO}$の推算}
+Boeing 747機の$W_{\rm TO_{max}}$を基に, $W_{\rm {TO}_{guess}}$を$1,050,000$ [lb]とおく. $W_{\rm F}$は実際に使用する燃料$W_{\rm Fused}$と予備燃料$W_{\rm Fres}$の和であるが, ここでは$W_{\rm Fres}$は含むものとして0とする. よって$W_{\rm F}$は
+\begin{eqnarray*}
+	W_{\rm F} = W_{\rm Fused} = (1 - M_{\rm ff}) W_{\rm TO} = 0.3828 \times W_{\rm TO}
+\end{eqnarray*}
+航空機設計法P.68より, 
+\begin{eqnarray*}
+	W_{\rm OE_{tent}} = W_{\rm TO_{guess}} - (1 - M_{\rm ff})W_{\rm TO_{guess}} - W_{\rm Fres} - W_{\rm PL} = 286,630 [\rm lb]
+\end{eqnarray*}
+ジェット旅客機が従う統計上の式によると, $A^{\prime}=-0.163, B^{\prime}=1.084$として
+\begin{eqnarray*}
+	W_{\rm OE} = 10^{\frac{\log{10}W_{\rm TO_{guess}} - A^{\prime}}{B^{\prime}}} = 506,958 [\rm lb]
+\end{eqnarray*}
+なので, 大きく異なる. 非線形の関係にあるので, 探索することで数値計算的に近い解を得ると,
+\begin{eqnarray*}
+	W_{\rm OE_{tent}} &=& 438,318 [\rm lb] \\
+	W_{\rm OE} &=& 438,404 [\rm lb]
+\end{eqnarray*}
+でほぼ収束し, 以上から
+\begin{eqnarray*}
+	W_{\rm TO} &=& 897,000 [\rm lb] \\
+	W_{\rm E} = W_{\rm OE} - W_{\rm crew} &=& 434,304 [\rm lb] \\
+	W_{\rm F} = (1 - M_{\rm ff})W_{\rm TO} &=& 343,371 [\rm lb]
+\end{eqnarray*}
+と定まる.
+\subsection{主翼面積$S$, エンジン推力$T_{\rm TO}$, 揚力係数$C_{\rm L}$の見積もり}
+\subsubsection{揚抗比$L/D$, 抵抗$D$の推算}
+Boeing 747-8機のARを参考に9.8程度とする. また, 
+\begin{eqnarray*}
+\cfrac{S_{\rm wet}}{S} = 4.45
+\end{eqnarray*}
+と比較的小さく設定する. 航空機設計法P.81図4.3より,
+\begin{eqnarray*}
+\cfrac{AR}{S_{\rm wet}/S} &=& 2.2 \\
+\cfrac{L}{D_{\rm max}} &=& 21
+\end{eqnarray*}
+ジェット機で揚抗比を最大化する場合を当てはめると,
+\begin{eqnarray*}
+(\cfrac{L}{D})_{\rm cruise} &=& 0.886 (L/D_{\rm max}) = 18.6 \\
+(\cfrac{L}{D})_{\rm loiter} &=& (L/D_{\rm max}) = 21 
+\end{eqnarray*}
+となって5.1.1で用いた値と比べても矛盾しない. ここで, $C_{\rm fe} = 0.003$として得られる統計データより,
+\begin{eqnarray*}
+C_{\rm D0} = C_{\rm fe}\cfrac{S_{\rm wet}}{S} = 0.0134 
+\end{eqnarray*}
+で, $e=0.85$を仮定すると, Clean形態で
+\begin{eqnarray*}
+C_D = C_{\rm D0} + \cfrac{C_{\rm L}^2}{e\pi AR} =  0.0134 + 0.0382C_{\rm L}^2
+\end{eqnarray*}
+離陸・着陸時の形態では
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{lll}
+			Take-off Flap & $\Delta C_{\rm D0} = 0.015$ & $e = 0.80$ \\
+			Landing Flap & $\Delta C_{\rm D0} = 0.065$ & $e = 0.75$ \\
+			Landing Gear & $\Delta C_{\rm D0} = 0.020$ &  \\ 
+		\end{tabular}
+	\end{center}
+\end{table}
+となるので,
+\begin{table}[h]
+	\begin{center}
+		\begin{tabular}{ll}
+			Take-off Gear-up & $0.0284 + 0.0406 C_{\rm L}^2$ \\
+			Take-off Gear-down & $0.0484 + 0.0406 C_{\rm L}^2$ \\
+			Landing Gear-up & $0.0784 + 0.0433 C_{\rm L}^2$ \\
+			Landing Gear-down & $0.0984 + 0.0433 C_{\rm L}^2$ \\ 
+		\end{tabular}
+	\end{center}
+\end{table}
+\subsubsection{Stall Speedの推算}
+FAR25 には$V_{\rm S_{min}}$の規定がないので,ここでは推算しない.
+\subsubsection{離陸性能の推算}
+離陸性能のサイジングの代表値として,$C_{\rm L_{max}TO} = 1.6, 2.0, 2.4$を用いる. また, 海面上を考えるので$\sigma = 1$とする. 統計関係式より,
+\begin{eqnarray*}
+S_{\rm TOFL} = 40.3 \times \cfrac{(W/S)_{\rm TO}}{\sigma C_{\rm L_{max}TO} \cdot(T/W)_{\rm TO}} = 10,000 [\rm ft]
+\end{eqnarray*}
+\begin{eqnarray*}
+(T/W)_{\rm TO} &=& 0.002519(W/S)_{\rm TO} \quad @ \ C_{\rm L_{max}TO} = 1.6 \\
+(T/W)_{\rm TO} &=& 0.002015(W/S)_{\rm TO} \quad @ \ C_{\rm L_{max}TO} = 2.0 \\
+(T/W)_{\rm TO} &=& 0.001679(W/S)_{\rm TO} \quad @ \ C_{\rm L_{max}TO} = 2.4 \\
+\end{eqnarray*}
+
+\subsubsection{着陸性能の推算}
+離陸性能のサイジングの代表値として, $C_{\rm L_{max}L} = 1.8, 2.2, 2.6, 3.0$を用いる. 設計要求より,
+\begin{eqnarray*}
+S_{\rm FL} = 0.29V_{\rm A}^2 = 0.29 \times (1.3V_{\rm SL})^2 = 7,500 [\rm ft]
+\end{eqnarray*}
+なので, 
+\begin{eqnarray*}
+V_{\rm SL} = 122 [\rm kt]
+\end{eqnarray*}
+従って, 着陸の翼面荷重の式
+\begin{eqnarray*}
+(W/S)_{\rm TO} = \cfrac{\frac{1}{2} \rho V_{\rm SL}^2 C_{\rm L_{max}L}}{(W_{\rm L} / W_{\rm TO})}
+\end{eqnarray*}
+に
+\begin{eqnarray*}
+(W_{\rm L} / W_{\rm TO}) &=& 0.85 \\
+\rho = 1.225 [\rm kg/m^3] &=& 0.125 [\rm kg \cdot s^2 / m^4]
+\end{eqnarray*}
+を得る. 従って, 代表値それぞれについて
+\begin{eqnarray*}
+(W/S)_{\rm TO} &=& 521.3 [\rm kg/m^2 ] = 107 [\rm lb/ft^2 ] \quad @ \ C_{\rm L_{max}L} = 1.8 \\
+(W/S)_{\rm TO} &=& 637.1 [\rm kg/m^2 ] = 131 [\rm lb/ft^2 ] \quad @ \ C_{\rm L_{max}L} = 2.2 \\
+(W/S)_{\rm TO} &=& 753.0 [\rm kg/m^2 ] = 154 [\rm lb/ft^2 ] \quad @ \ C_{\rm L_{max}L} = 2.6 \\
+(W/S)_{\rm TO} &=& 868.8 [\rm kg/m^2 ] = 178 [\rm lb/ft^2 ] \quad @ \ C_{\rm L_{max}L} = 3.0 \\
+\end{eqnarray*}
+となる.
+
+\subsubsection{上昇性能の推算}
+FAR25では一般的にsecond segment climb requirementが最も厳しい要求になることが知られているため, ここではこの飛行状態のみでサイジングを行う. 本機体はQuadruplet Tarbo Fan(N=4)なので, 上昇勾配$\gamma \ge 0.03$を満たしている必要がある.
+\begin{eqnarray*}
+(T/W)_{\rm TO} = \cfrac{N}{N-1}(\gamma + \cfrac{1}{L/D}) = \cfrac{4}{3}(0.03 + \cfrac{1}{L/D})
+\end{eqnarray*}
+離陸性能のサイジングの代表値の中央値$C_{\rm L_{max}TO} = 2.0$とすると, 速度$1.2V_{\rm S_{TO}}$なので
+\begin{eqnarray*}
+C_{\rm L} = \cfrac{2.0}{1.2^2}=1.4
+\end{eqnarray*}
+となり, OEIにおいてはTake-off, Gear-upの状態であるから
+\begin{eqnarray*}
+C_{\rm D} = 0.0284 + 0.0406 C_{\rm L}^2 = 0.108
+\end{eqnarray*}
+なので,
+\begin{eqnarray*}
+\cfrac{L}{D} = \cfrac{C_{\rm L}}{C_{\rm D}} = 12.96
+\end{eqnarray*}
+となるので, これを代入して
+\begin{eqnarray*}
+(T/W)_{\rm TO} = 0.1429
+\end{eqnarray*}
+実際には気温が27.8$C$高いことを考慮するので,
+\begin{eqnarray*}
+(T/W)_{\rm TO} = \cfrac{0.1429}{0.8} = 0.1786
+\end{eqnarray*}
+
+\subsubsection{巡航速度の推算}
+巡航時の関係式
+\begin{eqnarray*}
+\left(\cfrac{T}{W}\right)_{\rm cr} = \cfrac{(C_{\rm D0}+\Delta C_{\rm D0}) q}{W/S} + \cfrac{W/S}{qe\pi AR}
+\end{eqnarray*}
+標準大気より高度38,000[ft]での巡航時動圧$q$は,
+\begin{eqnarray*}
+q = \cfrac{1}{2}\rho V^2 = 0.5 \times 0.0385 [\rm kg s^2 / m^4 ] \times (M0.75 \times 294.8 [\rm m/s])^2 = 941 [\rm kg / m^2] = 193 [\rm lb / ft^2]
+\end{eqnarray*}
+圧縮性の影響$\Delta C_{\rm D0}$は0.0030として, $C_{\rm D0} + \Delta C_{\rm D0} = 0.0164$である. 最後に巡航時と離陸時の変換を行う.
+\begin{eqnarray*}
+\cfrac{W_{\rm cr}}{W_{\rm TO}} = \cfrac{W_1}{W_{\rm TO}}\cfrac{W_2}{W_1}\cfrac{W_3}{W_2}\cfrac{W_4}{W_3} = 0.956
+\end{eqnarray*}
+なので, 
+\begin{eqnarray*}
+\left(\cfrac{T}{W}\right)_{\rm TO} = \cfrac{(T/W)_{\rm cr}(W_{\rm cr}/W_{\rm TO})}{L_{\rm p_{cr}}} = 4.78\left(\cfrac{3.165}{(W/S)_{\rm TO}} + \cfrac{(W/S)_{\rm TO}}{5,051}\right)
+\end{eqnarray*}
+
+\subsubsection{サイジングプロット}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=12cm]{1.png}
+\caption{サイジングプロット}
+\end{center}
+\end{figure}
+以上の議論より, 
+\begin{eqnarray*}
+(W/S)_{\rm TO} &=& 178 [{\rm lb/ft^2} ] \\
+(T/W)_{\rm TO} &=& 0.2989
+\end{eqnarray*}
+$W_{\rm TO} = 897,000 [{\rm lb}]$だったので, 
+\begin{eqnarray*}
+S &=& 5,039.3 [{\rm ft^2} ] \\
+T &=& 268,113 [{\rm lb}]
+\end{eqnarray*}
+
+\section{胴体, E/G, 主翼, 尾翼の決定}
+\subsection{胴体寸法}
+\subsubsection{胴体断面径}
+胴体外径は一番密に詰まっているエコノミークラスの座席を中心に考える. Boeing747-400機体はエコノミークラスの座席幅が17.1[in]でピッチは31[in]である. あまりに小さすぎる気がしてならないので, 座席幅は18.5[in], ピッチは32[in]とする. 通路幅は座席幅と等しいと見ると, 両の窓側に3席ずつとそれぞれ通路挟んで真ん中に4席あるので, 機体の内径$D_i$とこれに構造厚さ10.25[in]を加えた外径$D_o$は
+\begin{eqnarray*}
+D_i &=& 18.5 \times 12 = 18.5 [ft] \\
+D_o &=& D_i + 10.25 = 19.3 [ft]
+\end{eqnarray*}
+
+\subsubsection{客室長さ}
+エコノミークラスのピッチが32[in], ビジネスクラスのピッチを64[in]とし, ファーストクラスは2階席にのびのびと座らせる. するとシート部分の長さは,
+\begin{eqnarray*}
+32 \times \cfrac{455}{10} + 64 \times \left(\cfrac{8}{2} + \cfrac{42}{7} \right) < 2,112 [\rm in] = 176 [\rm ft]
+\end{eqnarray*}
+一階部分でトイレはピッチベースで15個ほど, ほかに非常口をTypeAを3個, Type1を4個配置することを考える. キャビンアテンダント用座席なども考えると, 客室長さは220[ft]ほどになる.
+\subsubsection{胴体全長}
+ノーズ部分は胴体外径の0.5倍, 貨物室はファーストクラスの後ろに設けるとして, テール部分は外径の1倍とする. 胴体長さは
+\begin{eqnarray*}
+l_{\rm F} = 220[\rm ft] + 0.5 \times D_{\rm o} + D_{\rm o} = 29 = 249 [\rm ft] 
+\end{eqnarray*}
+\subsection{エンジンの選定}
+エンジン一発あたりの推力は,
+\begin{eqnarray*}
+\cfrac{T}{4} = 67,028 [{\rm lbf}]
+\end{eqnarray*}
+より, Thrust $68,000$-$72,000$ [lbf]のロールス・ロイスTrent7000を採用する.
+\subsection{主翼設計}
+\subsubsection{翼型}
+高亜音速機体であるので, スーパークリティカル翼型を採用する.
+
+\subsubsection{アスペクト比$AR$, 後退角$\Lambda$, テーパー比$\lambda$, 上反角$\Gamma$}
+アスペクト比はboeing747-8を踏襲し9.8とする. また, 後退角$\Lambda = 30 [{\rm deg}]$, テーパー比$\lambda = 0.3$, 上反角$\Gamma = 6 [{\rm deg}]$とする.
+
+\subsubsection{翼幅と翼端部, 翼根部のコード長}
+$S=5,039.3[{\rm ft^2}]$であったことから, 翼幅$b$は
+\begin{eqnarray*}
+b = \sqrt{S \times AR} = 222.23 [{\rm ft}]
+\end{eqnarray*}
+さらにコード長と平均空力翼弦はそれぞれ
+\begin{eqnarray*}
+c_{\rm r} &=& \cfrac{2}{1+\lambda}\sqrt{\cfrac{S}{AR}} = 34.89 [{\rm ft}] \\
+c_{\rm t} &=& \cfrac{2}{1+1/\lambda}\sqrt{\cfrac{S}{AR}} = 10.46 [{\rm ft}] \\
+\bar{c} &=& \cfrac{2}{3}c_{\rm r} \cfrac{1 + \lambda + \lambda^2}{1 + \lambda} = 24.86 [{\rm ft}]
+\end{eqnarray*}
+
+\subsubsection{その他のパラメタ}
+その他厚み比$t$や揚力傾斜$C_{\rm L\alpha}$は
+\begin{eqnarray*}
+t_{\rm root} &=& 17 [\%] \\
+t_{\rm tip} &=& 12 [{\%}] \\
+C_{\rm L\alpha} &=& 4\sim 5 [{\rm rad}]
+\end{eqnarray*}
+とする. 巡航時揚力係数$C_{\rm L_{cruise}}$は, 
+\begin{eqnarray*}
+C_{\rm L_{cruise}} = \cfrac{W_{\rm TO} - 0.4W_{\rm F}}{qS} = 0.781
+\end{eqnarray*}
+
+\subsubsection{燃料タンク容量$V_{\rm t}$}
+燃料タンク容量$V_{\rm t}$は, 統計式より
+\begin{eqnarray*}
+V_{\rm t} = 0.54 \times \cfrac{S^2}{b}t_{\rm r}\cfrac{1+\lambda\sqrt{\cfrac{t_{\rm t}}{t_{\rm r}}} + \lambda^2 \cfrac{t_{\rm t}}{t_
+{\rm r}}}{(1+\lambda)^2} = 8,166 [{\rm ft^3} ] = 60, 791 [{\rm gal}]
+\end{eqnarray*}
+であり, 必要な燃料タンク体積$V_{\rm F}$は
+\begin{eqnarray*}
+V_{\rm F} = \cfrac{W_{\rm F}}{\rho_{\rm F}} = \cfrac{343,371 [{\rm lb}]}{6.7 [{\rm lb/gal}]} = 51,249 [{\rm gal}] < V_{\rm t}
+\end{eqnarray*}
+なので十分である.
+
+\subsection{尾翼設計}
+\subsubsection{水平尾翼}
+ジェット旅客機なので$k_{\rm H} = 0.075$とすると,
+\begin{eqnarray*}
+V_{\rm H} = k_{\rm H}\sqrt{\cfrac{W}{S}} = 1.001
+\end{eqnarray*}
+である. 水平尾翼空力中心位置と全機重心位置の距離$l_{\rm H} = 0.35 l_{\rm F} = 87 [{\rm ft}]$とおくと, 水平尾翼面積$S_{\rm H}$は
+\begin{eqnarray*}
+S_{\rm H} = V_{\rm H} \cdot \cfrac{\bar{c} S}{l_{\rm H}} = 720 [{\rm ft^2}]
+\end{eqnarray*}
+また, その他のパラメタを以下のように定める.
+\begin{eqnarray*}
+AR_{\rm H} &=& 4.5 \\
+t_{\rm H} &=& 10[\%] \\
+\lambda_{\rm H} &=& 0.4 \\
+\Lambda_{\rm H} &=& 35 [\rm deg] \\
+\Gamma_{\rm H} &=& 4.0 [\rm deg]
+\end{eqnarray*}
+すると翼幅, コード長, 平均空力翼弦は,
+\begin{eqnarray*}
+b_{\rm H} &=& \sqrt{S_{\rm H} \times AR_{\rm H}} = 56.9 [\rm ft] \\
+c_{\rm r_H} &=& \cfrac{2}{1+\lambda_{\rm H}}\sqrt{\cfrac{S_{\rm H}}{AR_{\rm H}}} = 18.1 [\rm ft] \\
+c_{\rm t_H} &=& \cfrac{2}{1+1/\lambda_{\rm H}}\sqrt{\cfrac{S_{\rm H}}{AR_{\rm H}}} = 9.5 [\rm ft] \\
+\bar{c_{\rm H}} &=& \cfrac{2}{3}c_{\rm r_H} \cfrac{1 + \lambda_{\rm H} + \lambda_{\rm H}^2}{1 + \lambda_{\rm H}} = 13.4 [\rm ft]
+\end{eqnarray*}
+
+\subsubsection{垂直尾翼}
+$k_{\rm V} = 0.00675$とすると,
+\begin{eqnarray*}
+V_{\rm V} = k_{\rm V}\sqrt{\cfrac{W}{S}} = 0.090
+\end{eqnarray*}
+である. 垂直尾翼空力中心位置と全機重心位置の距離は水平尾翼空力中心位置と全機重心位置の距離とほとんど同じであると近似すると, 水平尾翼面積$S_{\rm H}$は
+\begin{eqnarray*}
+S_{\rm V} = V_{\rm V} \cdot \cfrac{b S}{l_{\rm V}} = 1156.7 [\rm ft^2]
+\end{eqnarray*}
+また, その他のパラメタを以下のように定める.
+\begin{eqnarray*}
+AR_{\rm V} &=& 1.2 \\
+t_{\rm V} &=& 10[\%] \\
+\lambda_{\rm V} &=& 0.8 \\
+\Lambda_{\rm V} &=& 35 [\rm deg]
+\end{eqnarray*}
+すると翼幅, コード長, 平均空力翼弦は,
+\begin{eqnarray*}
+b_{\rm V} &=& \sqrt{S_{\rm V} \times AR_{\rm V}} = 37.3 [\rm ft] \\
+c_{\rm r_V} &=& \cfrac{2}{1+\lambda_{\rm V}}\sqrt{\cfrac{S_{\rm V}}{AR_{\rm V}}} = 34.5 [\rm ft] \\
+c_{\rm t_V} &=& \cfrac{2}{1+1/\lambda_{\rm V}}\sqrt{\cfrac{S_{\rm V}}{AR_{\rm V}}} = 27.6 [\rm ft] \\
+\bar{c_{\rm V}} &=& \cfrac{2}{3}c_{\rm r_V} \cfrac{1 + \lambda_{\rm V} + \lambda_{\rm V}^2}{1 + \lambda_{\rm V}} = 31.2 [\rm ft]
+\end{eqnarray*}
+
+\subsection{舵面のサイジング}
+エルロンのコード長は授与区コード長に対して20[\%], スパン長は翼幅の50[\%], エレベーターの面積は$S_{\rm H}$に対して25[\%], ラダーの面積は$S_{\rm v}$に対して35[\%]とする.
+
+\subsection{タイヤのサイジング}
+前輪2個, 後輪12個で支えるとする. 前輪で15[\%], 後輪で90[\%]支えるとすると, それぞれのタイヤが支える重量は,
+\begin{eqnarray*}
+W_{\rm NW} &=& \cfrac{0.15W_{\rm TO}}{2} = 67,275 [\rm lb] \\
+W_{\rm MW} &=& \cfrac{0.90W_{\rm TO}}{12} = 67,275 [\rm lb]
+\end{eqnarray*}
+前輪後輪共にタイヤは以下のように定める.
+\begin{eqnarray*}
+D &=& 1.63 \times W_{\rm MW}^{0.315} = 54[\rm in] \\
+W &=& 0.1043 \times W_{\rm MW}^{0.480} = 21.66[\rm in]
+\end{eqnarray*}
+
+\section{脚配置と重量・重心位置の検討}
+\subsection{重量の決定}
+\subsubsection{主翼重量$W_{\rm w}$}
+主翼荷重$W_{\rm w}$は, 終局荷重倍数$N_{\rm ult}$, 零燃料時の最大質量$W_{\rm mzf}$, 50\%翼弦長での後退角$\Lambda_{1/2}$の
+\begin{eqnarray*}
+N_{\rm ult} &=& 3.8 \\
+W_{\rm mzf} &=& W_{\rm OE} + W_{\rm PL} = 553,714 [\rm lb] \\
+\Lambda_{1/2} &=& \tan^{-1}\left(\cfrac{\frac{b}{2}\tan\Lambda + \frac{c_t - c_r}{4}}{b/2}\right) = 25.11[\rm deg] = 0.438
+\end{eqnarray*}
+を利用して,
+\begin{eqnarray*}
+W_{\rm w} &=& 0.0017W_{\rm mzf}\left(\cfrac{b}{\cos \Lambda_{1/2}}\right)^{0.75} \left\{1+\left(\cfrac{6.25}{b}\cos \Lambda_{1/2}\right)^{0.5}\right\}N_{\rm ult}^{0.55}\left(\cfrac{bS}{t_r W_{\rm mzf} \cos \Lambda_{1/2}}\right)^{0.30} \\
+&=& 304,829 [\rm lb]
+\end{eqnarray*}
+
+\subsubsection{尾翼重量$W_{\rm t}$}
+\begin{eqnarray*}
+V_{\rm d} = (M 0.85 + 0.05) \times 574 [\rm kt] = 516.6 [\rm kt] = 873.7 [\rm ft/s]
+\end{eqnarray*}
+これを統計式に用いて,
+\begin{eqnarray*}
+W_{\rm t} = 1.04S_{\rm H}^{1.2}\left(0.4 + \cfrac{V_{\rm d}}{840}\right) + 1.04S_{\rm V}^{1.2}\left(0.4 + \cfrac{V_{\rm d}}{1000}\right) = 10,300 [\rm lb]
+\end{eqnarray*}
+
+\subsubsection{胴体重量$W_{\rm fus}$}
+胴体最大幅$B$を$D_{\rm o} = 19.3[\rm ft]$, 最大高さ$h = 30[\rm ft]$とする. またテイルアーム$l_{\rm T}$は$87[\rm ft]$で近似する.
+\begin{eqnarray*}
+S_{\rm fus} \simeq \pi \times 25 \times L_{\rm f} = 6,229 [\rm ft^2 ]
+\end{eqnarray*}
+すなわち胴体重量$W_{\rm fus}$は,
+\begin{eqnarray*}
+W_{\rm fus} = 0.0065V_{\rm d}^{0.5} \left(1.85 + \cfrac{l_{\rm T}}{B+h}\right) S_{\rm fus}^{1.2} = 24,830 [\rm lb]
+\end{eqnarray*}
+
+\subsubsection{ナセル重量$W_{\rm n}$}
+高バイパスエンジンについて$F_{\rm nacelle} = 0.065$であるから, ナセル重量$W_{\rm n}$は
+\begin{eqnarray*}
+W_{\rm n} = F_{\rm nacelle}T_{\rm TO} = 17,427 [\rm lb]
+\end{eqnarray*}
+
+\subsubsection{脚重量$W_{\rm g}$}
+低翼機なので$W_{\rm gr}=1.0$とし,
+\begin{eqnarray*}
+W_{\rm mg} &=& K_{\rm gr} (40.0 + 0.16W_{\rm TO}^{0.75} + 0.019W_{\rm TO} + 1.5 \times 10^{-5}W_{\rm TO}^{1.5}) = 34,490 [\rm lb] \\
+W_{\rm ng} &=& K_{\rm gr} (20.0 + 0.10W_{\rm TO}^{0.75} + 2.0 \times 10^{-6}W_{\rm TO}^{1.5}) = 4,634 [\rm lb] \\
+W_{\rm mg} + W_{\rm ng} &=& 39,124 [\rm lb]
+\end{eqnarray*}
+
+\subsubsection{推進系統重量$W_{\rm p}$}
+ロールス・ロイス Trent7000 ($14,209[\rm lb]$)を4個搭載しているので,
+\begin{eqnarray*}
+W_{\rm p} = 1.16W_{\rm eng} + 5,950 = 71,880 [\rm lb]
+\end{eqnarray*}
+
+\subsubsection{装備品重量$W_{\rm fix}$}
+装備分類の重量は, 長距離のため
+\begin{eqnarray*}
+W_{\rm fix} = F_{\rm fix}W_{\rm TO} = 71,760 [\rm lb]
+\end{eqnarray*}
+
+\subsubsection{運航に必要なアイテム重量$W_{\rm OP}$}
+長距離路線なので$F_{\rm OP}=35$として,
+\begin{eqnarray*}
+W_{\rm OP} = 187N_{\rm crew} + F_{\rm OP}P = 21,940 [\rm lb]
+\end{eqnarray*}
+
+\subsubsection{運用空虚重量$W_{\rm OE}$}
+ここまでで求めた値を合算する.
+\begin{eqnarray*}
+W_{\rm ME} &=& W_{\rm w} + W_{\rm t} + W_{\rm fus} + W_{\rm n} + W_{\rm g} = 396,510 [\rm lb] \\
+W_{\rm OE} &=& W_{\rm ME} + W_{\rm p} + W_{\rm fix} + W_{\rm tfo} + W_{\rm crew} + W_{\rm OP} = 568,881 [\rm lb]
+\end{eqnarray*}
+
+\subsection{重心の決定}
+原点を胴体軸上, 機体先端にとる. 以下で各コンポーネントの重心位置と全体の重心をまとめた表を示す.\subsubsection{$W_{\rm E}$の重心の検討}
+$W_{\rm E}$の重心配置は, 以下の通りである. ここだけ計算し直した
+\begin{table}[H]
+	\caption{$W_{\rm E}$の重心の決定}
+	\begin{center}
+		\begin{tabular}{p{2cm} p{2cm} p{3cm} p{3cm}} \hline
+			コンポネント  & & 重量 w [lb] & 重心位置 x [$L_{\rm f}$] \\ \hline \hline
+			主翼 & $W_{\rm w}$ & $304,829$ & 0.60 \\
+			尾翼 & $W_{\rm t}$ & $10,300$ & 0.98 \\
+			胴体 & $W_{\rm fus}$ & $24,830$ & 0.50 \\
+			ナセル & $W_{\rm n}$ & $17,427$ & 0.58 \\
+			前脚 & $W_{\rm ng}$ & $4,634$ & 0.15 \\
+			後脚 & $W_{\rm mg}$ & $34,490$ & 0.65 \\
+			推進系統 & $W_{\rm p}$ & $71,880$ & 0.57 \\
+			装備品 & $W_{\rm fix}$ & $71,760$ & 0.54 \\ \hline
+			合計 & $W_{\rm E}$ & $540,150$ & 0.589 \\ \hline \hline
+			重心 & & & 28.98\% MAC \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\subsubsection{$W_{\rm OE}$の重心の検討}
+$W_{\rm OE}$の重心配置は, 以下の通りである.
+\begin{table}[H]
+	\caption{$W_{\rm OE}$の重心の決定}
+	\begin{center}
+		\begin{tabular}{p{2cm} p{2cm} p{3cm} p{3cm}} \hline
+			コンポネント  & & 重量 w [lb] & 重心位置 x [$L_{\rm f}$] \\ \hline \hline
+			主翼 & $W_{\rm w}$ & $304,829$ & 0.60 \\
+			尾翼 & $W_{\rm t}$ & $10,300$ & 0.98 \\
+			胴体 & $W_{\rm fus}$ & $24,830$ & 0.50 \\
+			ナセル & $W_{\rm n}$ & $17,427$ & 0.58 \\
+			前脚 & $W_{\rm ng}$ & $4,634$ & 0.15 \\
+			後脚 & $W_{\rm mg}$ & $34,490$ & 0.65 \\
+			推進系統 & $W_{\rm p}$ & $71,880$ & 0.57 \\
+			その他 & $W_{\rm o}$ & $97,800$ & 0.54 \\ \hline
+			合計 & $W_{\rm OE}$ & $566,190$ & 0.587 \\ \hline \hline
+			重心 & & & 27.00\% MAC \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\subsubsection{$W_{\rm OE} + W_{\rm F}$の重心の検討}
+$W_{\rm OE} + W_{\rm F}$の重心配置は, 以下の通りである.
+\begin{table}[H]
+	\caption{$W_{\rm OE} + W_{\rm F}$の重心の決定}
+	\begin{center}
+		\begin{tabular}{p{2cm} p{2cm} p{3cm} p{3cm}} \hline
+			コンポネント  & & 重量 w [lb] & 重心位置 x [$L_{\rm f}$] \\ \hline \hline
+			主翼 & $W_{\rm w}$ & $304,829$ & 0.60 \\
+			尾翼 & $W_{\rm t}$ & $10,300$ & 0.98 \\
+			胴体 & $W_{\rm fus}$ & $24,830$ & 0.50 \\
+			ナセル & $W_{\rm n}$ & $17,427$ & 0.58 \\
+			前脚 & $W_{\rm ng}$ & $4,634$ & 0.15 \\
+			後脚 & $W_{\rm mg}$ & $34,490$ & 0.65 \\
+			推進系統 & $W_{\rm p}$ & $71,880$ & 0.57 \\
+			燃料 & $W_{\rm F}$ & $343,371$ & 0.61 \\
+			その他 & $W_{\rm o}$ & $97,800$ & 0.54 \\ \hline
+			合計 & $W_{\rm OE} + W_{F}$ & $909,561$ & 0.596 \\ \hline \hline
+			重心 & & & 35.99\% MAC \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\subsubsection{$W_{\rm TO}$の重心の検討}
+$W_{\rm TO}$の重心配置は, 以下の通りである.
+\begin{table}[H]
+	\caption{$W_{\rm TO}$の重心の決定}
+	\begin{center}
+		\begin{tabular}{p{2cm} p{2cm} p{3cm} p{3cm}} \hline
+			コンポネント  & & 重量 w [lb] & 重心位置 x [$L_{\rm f}$] \\ \hline \hline
+			主翼 & $W_{\rm w}$ & $304,829$ & 0.60 \\
+			尾翼 & $W_{\rm t}$ & $10,300$ & 0.98 \\
+			胴体 & $W_{\rm fus}$ & $24,830$ & 0.50 \\
+			ナセル & $W_{\rm n}$ & $17,427$ & 0.58 \\
+			前脚 & $W_{\rm ng}$ & $4,634$ & 0.15 \\
+			後脚 & $W_{\rm mg}$ & $34,490$ & 0.65 \\
+			推進系統 & $W_{\rm p}$ & $71,880$ & 0.57 \\
+			燃料 & $W_{\rm F}$ & $343,371$ & 0.61 \\
+			ペイロード & $W_{\rm PL}$ & $115,310$ & 0.50 \\
+			その他 & $W_{\rm o}$ & $97,800$ & 0.54 \\ \hline
+			合計 & $W_{\rm TO}$ & $1,024,871$ & 0.585 \\ \hline \hline
+			重心 & & & 24.98 \% MAC \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\subsubsection{$W_{\rm OE} + W_{\rm PL}$の重心の検討}
+$W_{\rm OE} + W_{\rm PL}$の重心配置は, 以下の通りである.
+
+\begin{table}[H]
+	\caption{$W_{\rm OE} + W_{\rm PL}$の重心の決定}
+	\begin{center}
+		\begin{tabular}{p{2cm} p{2cm} p{3cm} p{3cm}} \hline
+			 コンポネント  & & 重量 w [lb] & 重心位置 x [$L_{\rm f}$] \\ \hline \hline
+			主翼 & $W_{\rm w}$ & $304,829$ & 0.60 \\
+			尾翼 & $W_{\rm t}$ & $10,300$ & 0.98 \\
+			胴体 & $W_{\rm fus}$ & $24,830$ & 0.50 \\
+			ナセル & $W_{\rm n}$ & $17,427$ & 0.58 \\
+			前脚 & $W_{\rm ng}$ & $4,634$ & 0.15 \\
+			後脚 & $W_{\rm mg}$ & $34,490$ & 0.65 \\
+			推進系統 & $W_{\rm p}$ & $71,880$ & 0.57 \\
+			ペイロード & $W_{\rm PL}$ & $115,310$ & 0.50 \\
+			その他 & $W_{\rm o}$ & $97,800$ & 0.54 \\ \hline
+			合計 & $W_{\rm OE}$ & $681,500$ & 0.572 \\ \hline \hline
+			重心 & & & 11.95\% MAC \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=12cm]{plot_image.jpeg}
+\caption{weight excursion diagram}
+\end{center}
+\end{figure}
+
+\subsection{脚配置}
+上の配置だと, 87[\%]を後脚が, 残りの13[\%]を前脚が支えることになる. これは6.6で行ったタイヤのサイジングの大きめの見積もりを下回っているので, 妥当である. 
+
+\section{初期三面図}
+添付している図面を参考のこと.
+\section*{参考資料}
+JANE年鑑(2013-2014), JANE年鑑(2017-2018), 航空機設計法
+\end{document}

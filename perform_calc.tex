@@ -1,0 +1,479 @@
+\documentclass[12pt]{jsarticle}
+\usepackage{geometry}
+\geometry{left=10mm,right=10mm,top=10mm,bottom=15mm}	
+\usepackage{amssymb}
+\usepackage{mathcomp}
+\usepackage{amsmath}
+\usepackage{here}
+\usepackage[dvipdfmx]{graphicx}
+\begin{titlepage}
+\title{\Huge{卒業設計 初期性能等計算書}}
+\author{\LARGE{工学部航空宇宙工学科4年 野本陽平 (03-180332)}}
+\date{\large{2020年1月10日}}
+\thispagestyle{empty}
+\end{titlepage}
+\begin{document}
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+
+\section{空力特性推算(巡航時揚力)}
+\subsection{揚力傾斜}
+
+\subsubsection*{亜音速}
+亜音速における揚力傾斜は, 以下の式により推算される.
+\begin{eqnarray*}
+C_{\rm L_{\alpha}} = \cfrac{2\pi AR}{2 + \sqrt{4 + \frac{AR^2 \beta^2}{\eta^2}\left(1 + \frac{\tan^2 \Lambda}{\beta^2}\right)}}\left(\cfrac{S_{\rm exposed}}{S_{\rm ref}}\right)F
+\end{eqnarray*}
+基礎計画書で得た初期三面図およびSizingから, 以下の値を利用する.
+\begin{eqnarray*}
+\Lambda_{\rm LE} &=& 32 [{\rm deg}] \\
+S_{\rm exposed} &=& 4,200 [{\rm ft^2}] \\
+d &=& 30 [{\rm ft}]
+\end{eqnarray*}
+ここで, $d$は機体横幅と高さが異なることからこの値を用いている. なお, $M=0.2$において$C_{L_{\alpha}}=0.089[{\rm /deg}]$となる.
+
+\subsubsection*{超音速}
+超音速における揚力傾斜は, DATCOMにより与えられる. なお, $AR\tan\Lambda_{\rm LE} = 6.12$である.
+
+\subsubsection*{遷音速}
+遷音速時の揚力傾斜は, 亜音速と超音速の揚力傾斜を滑らかにつなぐことにより得ることができる. ここまでにより, 以下の揚力傾斜を得る.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=12cm]{liftslopebymachnumber.png}
+\caption{Lift Slope by Mach Number}
+\end{center}
+\end{figure}
+
+\subsection{$C_{\rm L_{max}}$}
+翼型は翼根で$\rm NACA64_2 215$, 翼端で$\rm NACA64_2 212$とする. $t/c$は翼端と翼根の平均をとって0.145とする. すると翼型データより, $C_{\rm l_{ max}} = 1.68, \alpha_{\rm 0L} = -2.8[{\rm deg}]$となる. 既存データから$\Delta Y = 21.3(t/c) = 3.09, C_{\rm L_{max}}/C_{\rm l_{max}} = 0.70, \Delta C_{\rm L_{max}} = 0, \Delta\alpha_{C_{\rm L_{max}}} = 3.2[{\rm deg}]$であるので, 
+\begin{eqnarray*}
+C_{L_{\rm max}} &=& C_{l_{\rm max}}\cfrac{C_{L_{\rm max}}}{C_{l_{\rm max}}} + \Delta C_{L_{\rm max}} =  1.176\\
+\alpha_{C_{L_{\rm max}}} &=& \cfrac{C_{L_{\rm max}}}{C_{L_{\alpha}}} + \alpha_{0L} + \Delta\alpha_{C_{L_{\rm max}}} = 13.61[{\rm deg}]
+\end{eqnarray*}
+
+\subsection{$C_L - \alpha$}
+以上の推算によって, 以下の巡航時$C_{L_{\alpha}}$曲線を得る.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=12cm]{clalpharelation.png}
+\caption{$C_{\rm L}-\alpha$ relation}
+\end{center}
+\end{figure}
+
+\section{抵抗推算}
+\subsection{有害抵抗}
+初期三面図がある現段階の抵抗推算には, Component Buildup Methodを用いる. 具体的な計算はエクセルシートにとどめ, 以下は結果のみ記載する.
+\begin{figure}[H]
+ \begin{minipage}{0.5\hsize}
+  \begin{center}
+   \includegraphics[width=70mm]{comp_parasitedrag_vs_mach.png}
+  \end{center}
+  \caption{cruise levelでの$C_{\rm D0} - \alpha$}
+  \label{fig:one}
+ \end{minipage}
+ \begin{minipage}{0.5\hsize}
+  \begin{center}
+   \includegraphics[width=70mm]{comp_parasitedrag_vs_mach_sea.png}
+  \end{center}
+  \caption{sea levelでの$C_{\rm D0} - \alpha$}
+  \label{fig:two}
+ \end{minipage}
+\end{figure}
+
+\subsection{誘導抵抗}
+有害抵抗同様に具体的な計算はエクセルシートにとどめ, 以下は結果のみ記載する.
+\begin{figure}[H]
+ \begin{minipage}{0.5\hsize}
+  \begin{center}
+   \includegraphics[width=70mm]{k_vs_m.png}
+  \end{center}
+  \caption{KとMの関係}
+  \label{fig:one}
+ \end{minipage}
+ \begin{minipage}{0.5\hsize}
+  \begin{center}
+   \includegraphics[width=70mm]{polarcurve.png}
+  \end{center}
+  \caption{巡航時のPolar Curve}
+  \label{fig:two}
+ \end{minipage}
+\end{figure}
+
+\section{Resizing}
+基礎計画書に対するフィードバックをもとにいくつかのResizingを行った. まず水平尾翼・垂直尾翼面積が小さかった問題は, テールアームを大きくとりすぎていたためであり, これを小さくすることで解決した. また, これに伴い胴体重量は軽くなった. さらに, 主翼の50\%翼弦長での後退角$\Lambda_{1/2}$を小さく見積もり, 結果として主翼重量を少し軽くした. 各運航状態における重心位置を計算するテーブルを記載し, またweight excursion diagramも記載した. ここでいくつかのコンポネントの重心位置は変更し, 結果として各運航状態において25\%MACくらいに重心を位置させることに成功した. 修正した計画要求書はv2として本初期性能等計算書に添付している.
+
+\section{高揚力装置設計}
+引き続き具体的な計算はエクセルシートを用いて行い, ここでは結果のみをまとめる.
+\subsection{$C_{L}-\alpha$}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=10cm]{clalpharelations.png}
+\caption{$C_{\rm L}-\alpha$ relation}
+\end{center}
+\end{figure}
+
+\subsection{$C_{D}-\alpha$}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=10cm]{cdalpharelations.png}
+\caption{$C_{\rm D}-\alpha$ relation}
+\end{center}
+\end{figure}
+
+\section{重量・重心の詳細な見積もり}
+翼が後ろすぎて安定性が得られなかったため, 翼を前方に行くように設計する.
+\subsubsection{$W_{\rm E}$の重心の検討}
+\begin{table}[H]
+	\caption{$W_{\rm E}$の重心の決定}
+	\begin{center}
+		\begin{tabular}{p{2cm} p{2cm} p{3cm} p{3cm}} \hline
+			コンポネント  & & 重量 w [lb] & 重心位置 x [$L_{\rm f}$] \\ \hline \hline
+			主翼 & $W_{\rm w}$ & $304,829$ & 0.50 \\
+			尾翼 & $W_{\rm t}$ & $10,300$ & 0.98 \\
+			胴体 & $W_{\rm fus}$ & $24,830$ & 0.45 \\
+			ナセル & $W_{\rm n}$ & $17,427$ & 0.47 \\
+			前脚 & $W_{\rm ng}$ & $4,634$ & 0.10 \\
+			後脚 & $W_{\rm mg}$ & $34,490$ & 0.55 \\
+			推進系統 & $W_{\rm p}$ & $71,880$ & 0.47 \\
+			装備品 & $W_{\rm fix}$ & $71,760$ & 0.45 \\ \hline
+			合計 & $W_{\rm E}$ & $540,150$ & 0.495 \\ \hline \hline
+			重心 & & & 35\% MAC \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\subsubsection{$W_{\rm OE}$の重心の検討}
+$W_{\rm OE}$の重心配置は, 以下の通りである.
+\begin{table}[H]
+	\caption{$W_{\rm OE}$の重心の決定}
+	\begin{center}
+		\begin{tabular}{p{2cm} p{2cm} p{3cm} p{3cm}} \hline
+			コンポネント  & & 重量 w [lb] & 重心位置 x [$L_{\rm f}$] \\ \hline \hline
+			主翼 & $W_{\rm w}$ & $304,829$ & 0.50 \\
+			尾翼 & $W_{\rm t}$ & $10,300$ & 0.98 \\
+			胴体 & $W_{\rm fus}$ & $24,830$ & 0.45 \\
+			ナセル & $W_{\rm n}$ & $17,427$ & 0.47 \\
+			前脚 & $W_{\rm ng}$ & $4,634$ & 0.10 \\
+			後脚 & $W_{\rm mg}$ & $34,490$ & 0.55 \\
+			推進系統 & $W_{\rm p}$ & $71,880$ & 0.47 \\
+			その他 & $W_{\rm o}$ & $97,800$ & 0.45 \\ \hline
+			合計 & $W_{\rm OE}$ & $566,190$ & 0.493 \\ \hline \hline
+			重心 & & & 33\% MAC \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\subsubsection{$W_{\rm OE} + W_{\rm F}$の重心の検討}
+$W_{\rm OE} + W_{\rm F}$の重心配置は, 以下の通りである.
+\begin{table}[H]
+	\caption{$W_{\rm OE} + W_{\rm F}$の重心の決定}
+	\begin{center}
+		\begin{tabular}{p{2cm} p{2cm} p{3cm} p{3cm}} \hline
+			コンポネント  & & 重量 w [lb] & 重心位置 x [$L_{\rm f}$] \\ \hline \hline
+			主翼 & $W_{\rm w}$ & $304,829$ & 0.50 \\
+			尾翼 & $W_{\rm t}$ & $10,300$ & 0.98 \\
+			胴体 & $W_{\rm fus}$ & $24,830$ & 0.45 \\
+			ナセル & $W_{\rm n}$ & $17,427$ & 0.47 \\
+			前脚 & $W_{\rm ng}$ & $4,634$ & 0.10 \\
+			後脚 & $W_{\rm mg}$ & $34,490$ & 0.55 \\
+			推進系統 & $W_{\rm p}$ & $71,880$ & 0.47 \\
+			燃料 & $W_{\rm F}$ & $343,371$ & 0.49 \\
+			その他 & $W_{\rm o}$ & $97,800$ & 0.45 \\ \hline
+			合計 & $W_{\rm OE} + W_{F}$ & $909,561$ & 0.492 \\ \hline \hline
+			重心 & & & 32\% MAC \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\subsubsection{$W_{\rm TO}$の重心の検討}
+$W_{\rm TO}$の重心配置は, 以下の通りである.
+\begin{table}[H]
+	\caption{$W_{\rm TO}$の重心の決定}
+	\begin{center}
+		\begin{tabular}{p{2cm} p{2cm} p{3cm} p{3cm}} \hline
+			コンポネント  & & 重量 w [lb] & 重心位置 x [$L_{\rm f}$] \\ \hline \hline
+			主翼 & $W_{\rm w}$ & $304,829$ & 0.50 \\
+			尾翼 & $W_{\rm t}$ & $10,300$ & 0.98 \\
+			胴体 & $W_{\rm fus}$ & $24,830$ & 0.45 \\
+			ナセル & $W_{\rm n}$ & $17,427$ & 0.47 \\
+			前脚 & $W_{\rm ng}$ & $4,634$ & 0.10 \\
+			後脚 & $W_{\rm mg}$ & $34,490$ & 0.55 \\
+			推進系統 & $W_{\rm p}$ & $71,880$ & 0.47 \\
+			燃料 & $W_{\rm F}$ & $343,371$ & 0.49 \\
+			ペイロード & $W_{\rm PL}$ & $115,310$ & 0.45 \\
+			その他 & $W_{\rm o}$ & $97,800$ & 0.45 \\ \hline
+			合計 & $W_{\rm TO}$ & $1,024,871$ & 0.487 \\ \hline \hline
+			重心 & & & 27\% MAC \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\subsubsection{$W_{\rm OE} + W_{\rm PL}$の重心の検討}
+$W_{\rm OE} + W_{\rm PL}$の重心配置は, 以下の通りである.
+
+\begin{table}[H]
+	\caption{$W_{\rm OE} + W_{\rm PL}$の重心の決定}
+	\begin{center}
+		\begin{tabular}{p{2cm} p{2cm} p{3cm} p{3cm}} \hline
+			 コンポネント  & & 重量 w [lb] & 重心位置 x [$L_{\rm f}$] \\ \hline \hline
+			主翼 & $W_{\rm w}$ & $304,829$ & 0.50 \\
+			尾翼 & $W_{\rm t}$ & $10,300$ & 0.98 \\
+			胴体 & $W_{\rm fus}$ & $24,830$ & 0.45 \\
+			ナセル & $W_{\rm n}$ & $17,427$ & 0.47 \\
+			前脚 & $W_{\rm ng}$ & $4,634$ & 0.10 \\
+			後脚 & $W_{\rm mg}$ & $34,490$ & 0.55 \\
+			推進系統 & $W_{\rm p}$ & $71,880$ & 0.47 \\
+			ペイロード & $W_{\rm PL}$ & $115,310$ & 0.45 \\
+			その他 & $W_{\rm o}$ & $97,800$ & 0.45 \\ \hline
+			合計 & $W_{\rm OE}$ & $681,500$ & 0.486 \\ \hline \hline
+			重心 & & & 26\% MAC \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=9cm]{13.jpg}
+\caption{weight excursion diagram}
+\end{center}
+\end{figure}
+
+\section{安定性・操縦性}
+縦方向について考える. 重心は0.5くらいにおく.
+
+\subsection{Static Marginの検討}
+$\bar{c} = 24.86[\rm ft]$, MOST-AFT CGは胴体先端を原点として$X_{\rm CG} = 123[\rm ft]$であるから, $\bar{X}_{\rm CG} = 123/24.86 = 4.95$.
+
+\subsubsection*{Wing}
+空力中心位置は$X_{\rm acw} = 131[\rm ft]$であるから, $\bar{X}_{\rm acw} = 131/24.86 = 5.27$. また, $C_{\rm L_{\alpha}} = 6.863$ per rad at Mach Number 0.85であり, 主翼を対称翼としているから$C_{\rm m_{w}} = 0$である.
+
+\subsubsection*{Fuselage}
+\begin{eqnarray*}
+C_{\rm m_{\alpha fus}} = \cfrac{K_{\rm f}w_{\rm f}^2 L_{\rm f}}{cS_{\rm w}} = \cfrac{0.028 \times 20^2 \times 249}{24.86 \times 5039.3} = 0.0223 [\rm /deg] = 1.275 [\rm /rad]
+\end{eqnarray*}
+
+\subsubsection*{Tail}
+空力中心位置は$231[\rm ft]$であるから, $\bar{X}_{\rm ach} = 231/24.86 = 9.29$であり$C_{\rm L_{\alpha h}} = 10.0$ per rad at Mach Number 0.85である.
+
+\subsubsection*{Downwash}
+\begin{eqnarray*}
+r &=& \cfrac{2l_{\rm t}}{b} = 0.783 \\
+m &=& \cfrac{2Z_{\rm t}}{b} = 0.200 \\
+\therefore \cfrac{d\alpha_h}{d\alpha} &=& 1 - \cfrac{d\epsilon}{d\alpha} = 0.70
+\end{eqnarray*}
+
+\subsubsection*{Dynamic Pressure}
+$n_{\rm h} = q_{\rm h}/q = 0.9$と仮定する.
+
+\subsubsection*{Power-off Neutral Point (Stick-Fixed)}
+\begin{eqnarray*}
+\bar{X}_{\rm np} &=& \cfrac{C_{\rm L_{\alpha}}\bar{X}_{\rm acw} - C_{\rm m_{\alpha fus}} + \eta_{\rm h}\cfrac{S_{\rm h}}{S_{\rm w}}C_{\rm L_{\alpha h}}\cfrac{d\alpha_{\rm h}}{d\alpha}\bar{X}_{\rm ach} + \cfrac{F_{\rm p\alpha}}{qS_{\rm w}}\cfrac{d\alpha_{\rm p}}{d\alpha} \bar{X}_{\rm p}}{C_{\rm L_{\alpha}} + \eta_{\rm h}\cfrac{S_{\rm h}}{S_{\rm w}}C_{\rm L_{\alpha h}}\cfrac{d\alpha_{\rm h}}{d\alpha}+\cfrac{F_{\rm p\alpha}}{qS_{\rm w}}} \\
+&=& \cfrac{(6.863)(5.27) - 1.275 + 0.9\cfrac{720}{5093}(2.87)(0.70)(9.29)}{6.863+0.9\cfrac{720}{5093}(2.87)(0.70)} = 5.10
+\end{eqnarray*}
+よって, Static Marginは15\%. このとき, $C_{\rm m_{\alpha}} = -6.863\times (5.27 - 4.95) = -2.20$で安定である.
+
+\subsubsection*{Power-off Neutral Point (Stick-Free)}
+fixedの時に比べて$C_{\rm L_{\alpha h}}$を20\%減らす. この時,
+\begin{eqnarray*}
+\bar{X}_{\rm np} = \cfrac{(6.863)(5.91) - 1.588 + 0.9\cfrac{720}{5093}(2.296)(0.70)(9.29)}{6.863+0.9\cfrac{720}{5093}(2.296)(0.70)} = 5.07
+\end{eqnarray*}
+よって, Static Marginは12\%. このとき, $C_{\rm m_{\alpha}} = -6.863\times (5.07 - 4.95) = -0.82$で安定である.
+
+\subsection{Trim解析}
+\begin{eqnarray*}
+C_{\rm m_{cg}} = 0 &=& 6.863 \times \alpha \times (5.7831 - 4.95) + 0 + 0 + 1.588\times \alpha - \left[0.9\cfrac{720}{5093}C_{\rm L_{h}}(9.29-4.95) \right] \\
+&=& 3.784\alpha - 0.552C_{\rm L_{h}}
+\end{eqnarray*}
+また, $C_{\rm L_h} = C_{\rm L_{ah}} [0.70\alpha - \Delta\alpha_{0L}]$について,
+\begin{eqnarray*}
+\Delta\alpha_{0L} = -\cfrac{1}{C_{\rm L\alpha}}(0.9)K_{\rm f}\left(\cfrac{\partial C_{\rm L}}{\partial \delta_{\rm f}}\right)\cfrac{S_{\rm flapped}}{S_{\rm ref}}\cos\Lambda_{\rm H.L.}\delta_{\rm f} = -\cfrac{1}{6.863}(0.9)(0.5)(0.53)(0.3)(0.883)\delta_{\rm f} = -0.01\delta_{\rm f}
+\end{eqnarray*}
+であるから, $C_{\rm L_h} = 10.0\times [0.70\alpha + 0.01\delta_{\rm f}] = 7.0\alpha + 0.1\delta_{\rm f}$. よって
+\begin{eqnarray*}
+C_{\rm m_{cg}} = 3.784\alpha - 0.552\times(7.0\alpha + 0.1\delta_{\rm f}) = -0.08\alpha - 0.055\delta_{\rm f}
+\end{eqnarray*}
+となる.
+\begin{eqnarray*}
+C_{\rm L_{total}} &=& C_{\rm L_{\alpha}}\alpha + C_{\rm L_h}\eta_{\rm h}\cfrac{S_{\rm h}}{S_{\rm w}}
+= 6.863\alpha + (0.9)\cfrac{720}{5093}(7.0\alpha + 0.1\delta_{\rm f}) \\
+&=& 7.75\alpha + 0.013\delta_{\rm f}
+\end{eqnarray*}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=10cm]{trimplot.png}
+\caption{Trim Plot}
+\end{center}
+\end{figure}
+
+\section{Engine性能曲線の見積もり}
+\subsection{Thrust Lapse Rate}
+Thrust Lapse Rate ($\tau$) は, 以下の式により定義される.
+\begin{eqnarray*}
+\tau = \cfrac{T}{T_{\rm SL}}
+\end{eqnarray*}
+また, $\tau$は次式により見積もることができる.
+\begin{eqnarray*}
+\tau = \{K_{1\tau} + K_{2\tau}{\rm BPR} + (K_{3\tau} + K_{4\tau}{\rm BPR})M \} \sigma^{\rm s}
+\end{eqnarray*}
+ただし, BPRはバイパス比, $\sigma$は空気密度比である. 本機体で用いるエンジンは, バイパス比10:1である. 
+\begin{table}[H]
+	\caption{Powerplant Thrust Parameters}
+	\begin{center}
+		\begin{tabular}{p{2cm} p{1cm} p{1cm} p{1cm} p{1cm} p{1cm}} \hline
+			$M$ & $K_{\rm 1\tau}$ & $K_{\rm 2\tau}$ & $K_{\rm 3\tau}$ & $K_{\rm 4\tau}$ & $s$ \\ \hline\hline
+			 0 $\sim$ 0.4 & 1 & 0 & -0.595 & -0.03 & 0.7 \\ \hline
+			 0.4 $\sim$ 0.85 & 0.89 & -0.014 & -0.3 & 0.005 & 0.7 \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+結果は以下のようになった.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=12cm]{thrustlapserate.png}
+\caption{Thrust Lapse Rate}
+\end{center}
+\end{figure}
+
+\subsection{Specific Fuel Consumption}
+Specific Fuel Consumptionは以下の式で見積もることができる.
+\begin{eqnarray*}
+c_{\rm j} = c^{\prime}(1 - 0.15{\rm BPR}^{0.65})[1 + 0.28(1 + 0.063{\rm BPR}^2) M]\sigma^{0.08}
+\end{eqnarray*}
+結果は以下のようになった.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=12cm]{specificfuelconsumption.png}
+\caption{Specific Fuel Consumption}
+\end{center}
+\end{figure}
+
+\section{Carpet Plot}
+現時点の設計値付近である$T/W = 0.28, W/S = 160$を中心として$T/W = 0.26, 0.28, 0.30$, $W/S = 120, 160, 200$のそれぞれ3通り, 計9通りについて検討しCarpet Plotを作成する.
+\begin{figure}[H]
+ \begin{minipage}{0.5\hsize}
+  \begin{center}
+   \includegraphics[width=70mm]{take-off_fieldlength.png}
+  \end{center}
+  \caption{take-off field length}
+  \label{fig:one}
+ \end{minipage}
+ \begin{minipage}{0.5\hsize}
+  \begin{center}
+   \includegraphics[width=70mm]{landing_fieldlength.png}
+  \end{center}
+  \caption{landing field length}
+  \label{fig:two}
+ \end{minipage}
+\end{figure}
+\begin{figure}[H]
+ \begin{minipage}{0.5\hsize}
+  \begin{center}
+   \includegraphics[width=70mm]{ssc.png}
+  \end{center}
+  \caption{second segment climb}
+  \label{fig:one}
+ \end{minipage}
+ \begin{minipage}{0.5\hsize}
+  \begin{center}
+   \includegraphics[width=70mm]{icac.png}
+  \end{center}
+  \caption{initial cruise altitude capability}
+  \label{fig:two}
+ \end{minipage}
+\end{figure}
+最終的に以下のCarpet Plotを得た. second segment climb rateとinitial cruise altitude capacityについては9つの点全てで条件を満たしていたため記載していない. この結果, 最適値(下のグラフでいうoptimal point)は$T/W = 0.26, W/S = 126, W_{\rm TO} = 1,023,500[\rm lb]$であることがわかった.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=12cm]{carpetplot.png}
+\caption{Carpet Plot}
+\end{center}
+\end{figure}
+\begin{table}[H]
+	\caption{Performance}
+	\begin{center}
+		\begin{tabular}{p{7cm} p{1cm} p{2cm} p{2cm}} \hline
+			  & & Requirement & Result \\ \hline \hline
+			 Take-off Field Length [ft] & TOFL & $10,000$ & $9,637$ \\ \hline
+			 Landing Field Length [ft] & LFL & $7,500$ & $6,866$ \\ \hline
+			 Second Segment Climb Rate [\%] & SSC & $2.4$ & $7.85$ \\ \hline
+			 Initial Cruise Altitude Capacity [ft/min] & ICAC & $300$ & $2531.4$ \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\begin{table}[H]
+	\caption{Specifications}
+	\begin{center}
+		\begin{tabular}{p{6cm} p{1cm} p{2cm}} \hline
+			 Maximum Take-off Weight [lb] & MTOW & $952,412$ \\ \hline
+			 Operational Empty Weight (New) [lb] & OEW & $460,396$ \\ \hline
+			 Empty Weight [lb] & $W_{\rm E}$ & $434,865$ \\ \hline
+			 Fuel Weight [lb] & $W_{\rm F}$ & $385,504$ \\ \hline
+			 Span [ft] & $b$ & $272.2$ \\ \hline
+			 Wing Area [sq ft] & $S$ & $7,558.8$ \\ \hline
+			 Parasite Drag Coefficient & $(C_{D0})_{\rm cr}$ & $0.0192$ \\ \hline
+			 Lift to Drag Ratio & $(L/D)_{\rm cr}$ & $17.4$ \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\section{性能推算}
+\subsection{Necessary and Available Thrust}
+マッハ数に応じたNecessary ThrustとAvailable Thrustの関係を以下に示す.
+以上のグラフから, 巡航高度における最大巡航マッハ数が$M > 0.85$となっているので設計要求を満たす.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=10cm]{tn_vs_ta.png}
+\caption{Tn and Ta vs. M at Cruise Altitude}
+\end{center}
+\end{figure}
+
+\subsection{Payload Range Diagram}
+ジェット機の飛行距離は以下の式により推算される.
+\begin{eqnarray*}
+R &=& R_{\rm F}\ln\cfrac{W_{\rm TO}}{W_{\rm TO} - W_{\rm F}} \\
+R_{\rm F} &=& V\cfrac{\eta_{\rm j}}{c_{\rm j}}\cfrac{C_{\rm L}}{C_{\rm D}} = \cfrac{\eta_{\rm j}}{c_{\rm j}}\sqrt{\cfrac{2}{\rho S}}\cfrac{C_{\rm L}^0.5}{C_{\rm D}}
+\end{eqnarray*}
+$\eta_{\rm j} = 0.99, c_{\rm j} = 0.55, L/D = 17.4, W_{\rm TO} = 968898[\rm lb], W_{\rm F} = 394866[\rm lb]$等を代入すると$R = 8042 [\rm nm]$となるので, 設計要求の飛行距離を$8,000 [\rm nm]$に変更する. 以上によって設計要求を満たす. また以下にPayload-Range Diagramを載せる.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=10cm]{payload_range_diagram.png}
+\caption{Payload-Range Diagram}
+\end{center}
+\end{figure}
+
+\subsection{Take-off Field Length}
+加速停止距離をカーペットプロット作成の過程で求めたので, 結果のみ記載する. これよりTake-off Field Lengthは$9,949[\rm ft]$になり設計要求を満たす.
+
+\subsection{Landing Field Length}
+Landing Field Lengthはカーペットプロット作成の過程で求め$6,867[\rm ft]$と分かっている. これは設計要求を満たす.
+
+\section{要求性能を満たしているかの確認}
+以上, 要求性能はすべて満たしている.
+
+\section{強度計算}
+\subsection{$V - n$線図}
+本機体は飛行機輸送$T$に分類される.
+\begin{eqnarray*}
+L = nW = \cfrac{1}{2}\rho V^2SC_{\rm L}
+\end{eqnarray*}
+より, $n_{\rm A} = 2.11$である.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=12cm]{vn.png}
+\caption{$V-n$線図}
+\end{center}
+\end{figure}
+
+\subsection{主翼にかかる剪断力と曲げモーメント}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=12cm]{sheermoment.png}
+\caption{剪断力線図及び曲げモーメント線図}
+\end{center}
+\end{figure}
+
+\end{document}
